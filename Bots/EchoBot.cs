@@ -20,7 +20,7 @@ namespace Microsoft.BotBuilderSamples.Bots
         private const string CosmosDBDatabaseId = "<your-database-id>";
         private const string CosmosDBContainerId = "bot-storage";
         // Create local Memory Storage - commented out.
-        // private static readonly MemoryStorage _myStorage = new MemoryStorage();
+        //private static readonly MemoryStorage doorStorage = new MemoryStorage();
         // Replaces Memory Storage with reference to Cosmos DB.
         private static readonly CosmosDbPartitionedStorage doorStorage = new CosmosDbPartitionedStorage(new CosmosDbPartitionedStorageOptions
         {
@@ -36,10 +36,10 @@ namespace Microsoft.BotBuilderSamples.Bots
             
 
             //Easter Egg 
-            if (turnContext.Activity.Text.ToUpper().Contains("tür") && turnContext.Activity.Text.ToUpper().Contains("öffne"))
+            if (turnContext.Activity.Text.ToLower().Contains("tür") && turnContext.Activity.Text.ToLower().Contains("öffne"))
             {
                 string[] keys = { "doorTries" };
-                IDictionary<string,object> triesDoorColl = doorStorage.ReadAsync(keys).Result;
+                IDictionary<string,object> triesDoorColl = doorStorage.ReadAsync(keys,cancellationToken).Result;
                 string triesDoorStr = (string) triesDoorColl["doorTries"];
 
                 int triesDoor = Convert.ToInt32(triesDoorStr);
@@ -51,12 +51,12 @@ namespace Microsoft.BotBuilderSamples.Bots
                 triesDoorStr = Convert.ToString(triesDoor);
                 triesDoorColl["doorTries"] = triesDoorStr;
 
-                await doorStorage.WriteAsync(triesDoorColl);
+                await doorStorage.WriteAsync(triesDoorColl,cancellationToken);
             }
-            if (turnContext.Activity.Text.ToUpper().Contains("hintertür") && turnContext.Activity.Text.ToUpper().Contains("öffne"))
+            if (turnContext.Activity.Text.ToLower().Contains("hintertür") && turnContext.Activity.Text.ToLower().Contains("öffne"))
             {
                 string[] keys = { "backdoorTries" };
-                IDictionary<string, object> triesDoorColl = doorStorage.ReadAsync(keys).Result;
+                IDictionary<string, object> triesDoorColl = doorStorage.ReadAsync(keys,cancellationToken).Result;
                 string triesDoorStr = (string)triesDoorColl["doorTries"];
 
                 int triesBackdoor = Convert.ToInt32(triesDoorStr);
@@ -68,7 +68,7 @@ namespace Microsoft.BotBuilderSamples.Bots
                 triesDoorStr = Convert.ToString(triesBackdoor);
                 triesDoorColl["backdoorTries"] = triesDoorStr;
 
-                await doorStorage.WriteAsync(triesDoorColl);
+                await doorStorage.WriteAsync(triesDoorColl,cancellationToken);
             }
 
             await turnContext.SendActivityAsync(MessageFactory.Text(replyText, replyText), cancellationToken);
