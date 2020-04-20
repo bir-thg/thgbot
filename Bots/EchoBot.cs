@@ -52,13 +52,13 @@ namespace Microsoft.BotBuilderSamples.Bots
             //Easter Egg (Robert)
             if (turnContext.Activity.Text.ToLower().Contains("tür") && turnContext.Activity.Text.ToLower().Contains("öffne"))
             {
-                string[] keys = { "doorTries" };
+                string[] keys = { "Item.doorTries" };
                 IDictionary<string,object> triesDoorColl = doorStorage.ReadAsync(keys,cancellationToken).Result;
                 string triesDoorStr = (string) triesDoorColl["doorTries"];
 
                 int triesDoor = Convert.ToInt32(triesDoorStr);
                 
-                replyText = $"Du kannst die Tür nicht öffnen! Es wurde schon {triesDoor} versucht die Tür zu öffnen";
+                replyText = $"Du kannst die Tür nicht öffnen! Es wurde schon {triesDoor} mal versucht, die Tür zu öffnen";
 
                 triesDoor++;
 
