@@ -22,8 +22,8 @@ namespace Microsoft.BotBuilderSamples.Bots
         // Initialize Database (Robert, Bir)
         private const string CosmosServiceEndpoint = "https://thg-cosmos-db.documents.azure.com:443/";
         private const string CosmosDBKey = "A7VarPBUH4Ke89T4ro5ychUrGzqJ0O5KRHTYB4JEVvNTVPZDkWUBPhc3LlcgC2tyZSXGGPgqZUnMZBl07NKBxw==";
-        private const string CosmosDBDatabaseId = "ToDoList";
-        private const string CosmosDBContainerId = "Items";
+        private const string CosmosDBDatabaseId = "thg-hn-bot-db";
+        private const string CosmosDBContainerId = "thg-hn-bot-db-container";
         // Create local Memory Storage - commented out.
         // private static readonly MemoryStorage doorStorage = new MemoryStorage();
         // Replaces Memory Storage with reference to Cosmos DB.
@@ -49,21 +49,21 @@ namespace Microsoft.BotBuilderSamples.Bots
             var replyText = $"Ich wiederhole: {turnContext.Activity.Text}";
             
      
-            //Easter Egg (Robert)
+            //Easter Egg (Robert, bir)
             if (turnContext.Activity.Text.ToLower().Contains("tür") && turnContext.Activity.Text.ToLower().Contains("öffne"))
             {
-                string[] keys = { "Items.doorTries" };
+                string[] keys = { "door" };
                 IDictionary<string,object> triesDoorColl = doorStorage.ReadAsync(keys,cancellationToken).Result;
-                string triesDoorStr = (string) triesDoorColl["doorTries"];
+                int triesDoor = (int) triesDoorColl["doorTries"];
 
-                int triesDoor = Convert.ToInt32(triesDoorStr);
+                // int triesDoor = Convert.ToInt32(triesDoorStr);
                 
                 replyText = $"Du kannst die Tür nicht öffnen! Es wurde schon {triesDoor} mal versucht, die Tür zu öffnen";
 
                 triesDoor++;
 
-                triesDoorStr = Convert.ToString(triesDoor);
-                triesDoorColl["doorTries"] = triesDoorStr;
+                // triesDoorStr = Convert.ToString(triesDoor);
+                triesDoorColl["doorTries"] = triesDoor;
 
                 await doorStorage.WriteAsync(triesDoorColl,cancellationToken);
             }
