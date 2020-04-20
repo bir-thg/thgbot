@@ -52,7 +52,7 @@ namespace Microsoft.BotBuilderSamples.Bots
             //Easter Egg (Robert)
             if (turnContext.Activity.Text.ToLower().Contains("tür") && turnContext.Activity.Text.ToLower().Contains("öffne"))
             {
-                string[] keys = { "Item.doorTries" };
+                string[] keys = { "Items.doorTries" };
                 IDictionary<string,object> triesDoorColl = doorStorage.ReadAsync(keys,cancellationToken).Result;
                 string triesDoorStr = (string) triesDoorColl["doorTries"];
 
