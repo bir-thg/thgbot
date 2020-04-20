@@ -46,7 +46,7 @@ namespace Microsoft.BotBuilderSamples.Bots
         */
         protected override async Task OnMessageActivityAsync(ITurnContext<IMessageActivity> turnContext, CancellationToken cancellationToken)
         {
-            var replyText = $"Ich wiederhole: {turnContext.Activity.Text}";
+            var replyText = $"Ich wiederholeV2: {turnContext.Activity.Text}";
             
      
             //Easter Egg (Robert, bir)
